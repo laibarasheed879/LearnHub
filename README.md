@@ -4,15 +4,15 @@
 
 LearnHub is a full-stack Learning Management System (LMS) developed using the MERN stack. It provides a platform where students can explore courses, enroll in learning programs, and track their learning activities, while administrators can manage courses through a dedicated dashboard.
 
-## 🌐 Live Demo
+# Live Demo
 
 - **Frontend:** https://learn-hub-ten-teal.vercel.app
 - **Backend API:** https://learnhub-backend-flame.vercel.app/api/courses
 - **GitHub Repository:** https://github.com/laibarasheed879/LearnHub
 
-## ✨ Key Features
+# Key Features
 
-### 👩‍🎓 Student Features
+# Student Features
 - Student registration and login
 - Secure authentication using JWT
 - Browse available courses and view course details
@@ -20,7 +20,7 @@ LearnHub is a full-stack Learning Management System (LMS) developed using the ME
 - Access a personalized student dashboard
 - View enrolled courses and learning progress
 
-### 🛠️ Admin Features
+# Admin Features
 - Admin authentication and role-based access
 - Add new courses
 - View and manage existing courses
@@ -28,14 +28,14 @@ LearnHub is a full-stack Learning Management System (LMS) developed using the ME
 - Delete courses
 - Manage course content through the admin dashboard
 
-### 🎨 User Interface
+#User Interface
 - Modern blue-and-white design
 - Responsive layout for different screen sizes
 - Reusable React components
 - Interactive navigation and course cards
 - Form validation and user notifications
 
-## 🧰 Technologies Used
+#Technologies Used
 
 | Technology | Purpose |
 |---|---|
@@ -108,7 +108,7 @@ npm start
 
 If your backend does not define a `start` script, use the start command configured in its `package.json`.
 
-### 3. Set Up the Frontend
+# 3. Set Up the Frontend
 
 Open a separate terminal:
 
@@ -120,17 +120,17 @@ npm start
 
 The React development server will display the local frontend address in the terminal.
 
-## 🔐 Security Notes
+# Security Notes
 
 - Keep database credentials and JWT secrets private.
 - Never commit your `.env` file or real credentials to GitHub.
 - Configure environment variables separately for local development and deployment.
 
-## 🎯 Project Objective
+# Project Objective
 
 The objective of LearnHub is to demonstrate practical implementation of full-stack web development concepts, including frontend development, REST APIs, database integration, authentication, role-based authorization, CRUD operations, and deployment.
 
-## 👩‍💻 Developer
+# Developer
 
 **Laiba Rasheed**
 
