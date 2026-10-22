@@ -15,7 +15,7 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/courses";
+const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/courses`;
 
 const emptyForm = {
   title: "",
@@ -42,7 +42,7 @@ function AdminDashboard() {
       const response = await axios.get(API_URL);
       setCourses(response.data);
     } catch {
-      setError("Courses load nahi ho sake. Backend check karein.");
+      setError("Courses are not available . Please check backend.");
     } finally {
       setLoading(false);
     }
@@ -156,7 +156,7 @@ function AdminDashboard() {
     } catch (err) {
       setError(
         err.response?.data?.message ||
-          "Course delete nahi hua. Admin access check karein."
+          "Course is not deleted. check admin access."
       );
     }
   };

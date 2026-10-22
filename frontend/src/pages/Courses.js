@@ -29,7 +29,7 @@ function Courses() {
         const data = await getCourses();
         setCourses(data);
       } catch (err) {
-        setError("Courses load nahi ho sake. Backend server check karein.");
+        setError("Courses are not loaded. please check backend server.");
       } finally {
         setLoading(false);
       }
