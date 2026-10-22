@@ -32,8 +32,8 @@ function Home() {
     const fetchCourses = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/courses"
-        );
+  `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/courses`
+);
         setCourses(Array.isArray(response.data) ? response.data : []);
       } catch (error) {
         console.error("Unable to load courses:", error);
