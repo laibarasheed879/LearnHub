@@ -6,3 +6,6 @@ build/
 dist/
 .DS_Store
 .amazonq/
+
+# gstack (global install)
+.amazonq/rules/gstack.md

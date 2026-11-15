@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { getCourses } from "../services/courseService";
 import {
   Container,
   Row,
@@ -31,10 +31,8 @@ function Home() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get(
-  `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/courses`
-);
-        setCourses(Array.isArray(response.data) ? response.data : []);
+        const data = await getCourses();
+        setCourses(Array.isArray(data) ? data : []);
       } catch (error) {
         console.error("Unable to load courses:", error);
         setCourseError(true);
@@ -45,6 +43,8 @@ function Home() {
 
     fetchCourses();
   }, []);
+
+   
 
   const filteredCourses = courses.filter((course) => {
     const searchText = search.toLowerCase().trim();
