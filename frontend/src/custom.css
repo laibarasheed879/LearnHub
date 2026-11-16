@@ -5851,7 +5851,6 @@ footer a:hover {
 }
 
 .learnhub-navbar .navbar-toggler {
-  display: inline-flex;
   width: 42px;
   height: 42px;
   align-items: center;
@@ -6087,6 +6086,320 @@ footer a:hover {
   .learnhub-footer *::before,
   .learnhub-navbar *::after,
   .learnhub-footer *::after {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ========== ABOUT AND CONTACT PAGE ========== */
+.about-page {
+  --about-ink: #172b45;
+  --about-muted: #65778e;
+  --about-blue: #2463c9;
+  --about-line: #e2eaf4;
+  background: #fff;
+  color: var(--about-ink);
+}
+
+.about-page .about-hero {
+  overflow: hidden;
+  padding: clamp(54px, 8vw, 92px) 0;
+  background: linear-gradient(115deg, #f5f9ff 0%, #edf4ff 55%, #f8fbff 100%);
+  text-align: left;
+}
+
+.about-hero-copy {
+  padding-block: 10px;
+}
+
+.about-page .about-label,
+.about-page .about-section-kicker {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--about-blue);
+  font-size: .73rem;
+  font-weight: 750;
+  letter-spacing: .13em;
+}
+
+.about-page .about-hero h1 {
+  max-width: 620px;
+  margin: 0 0 18px;
+  color: var(--about-ink);
+  font-size: clamp(2.6rem, 5vw, 4.15rem);
+  font-weight: 780;
+  letter-spacing: -.055em;
+  line-height: 1.08;
+}
+
+.about-page .about-hero h1 span {
+  display: block;
+  color: var(--about-blue);
+}
+
+.about-page .about-hero p {
+  max-width: 530px;
+  margin: 0 0 26px;
+  color: var(--about-muted);
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  line-height: 1.75;
+}
+
+.about-page .about-button {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0 19px !important;
+  border: 1px solid #2463c9 !important;
+  border-radius: 9px !important;
+  background: #2463c9 !important;
+  color: #fff !important;
+  font-size: .91rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+.about-page .about-button:hover {
+  transform: translateY(-1px);
+  border-color: #194eaa !important;
+  background: #194eaa !important;
+}
+
+.about-page .about-image-frame {
+  overflow: hidden;
+  padding: 8px;
+  border: 1px solid rgba(213, 226, 243, .9);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, .84);
+  box-shadow: 0 22px 60px rgba(35, 72, 120, .12);
+}
+
+.about-page .about-hero-image {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1.42 / 1;
+  border-radius: 14px;
+  object-fit: cover;
+  object-position: 68% center;
+}
+
+.about-page .about-section {
+  padding: clamp(58px, 8vw, 88px) 0;
+}
+
+.about-page .about-section h2,
+.about-page .about-contact-card h2 {
+  margin: 0 0 16px;
+  color: var(--about-ink);
+  font-size: clamp(1.8rem, 3.2vw, 2.45rem);
+  font-weight: 740;
+  letter-spacing: -.04em;
+  line-height: 1.2;
+}
+
+.about-page .about-purpose-section p,
+.about-page .about-section-heading p,
+.about-page .about-contact-card p {
+  margin: 0;
+  color: var(--about-muted);
+  font-size: .97rem;
+  line-height: 1.8;
+}
+
+.about-page .about-purpose-section p {
+  max-width: 600px;
+}
+
+.about-page .about-purpose-panel {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: clamp(24px, 4vw, 36px);
+  border: 1px solid var(--about-line);
+  border-radius: 16px;
+  background: #f7faff;
+}
+
+.about-page .about-purpose-icon,
+.about-page .about-card-icon {
+  display: inline-grid;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #dbe8fb;
+  border-radius: 12px;
+  background: #edf4ff;
+  color: var(--about-blue);
+}
+
+.about-page .about-purpose-panel h3 {
+  margin: 2px 0 8px;
+  color: var(--about-ink);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.about-page .about-direction-section {
+  background: #f7faff;
+}
+
+.about-page .about-section-heading {
+  max-width: 680px;
+  margin: 0 auto 34px;
+  text-align: center;
+}
+
+.about-page .about-section-heading h2 {
+  margin-bottom: 12px;
+}
+
+.about-page .about-card {
+  height: 100%;
+  border: 1px solid var(--about-line) !important;
+  border-radius: 15px !important;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(30, 57, 91, .045);
+  transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.about-page .about-card:hover {
+  transform: translateY(-3px);
+  border-color: #cfddf0 !important;
+  box-shadow: 0 12px 28px rgba(30, 57, 91, .08);
+}
+
+.about-page .about-card .card-body {
+  padding: clamp(23px, 3vw, 30px);
+}
+
+.about-page .about-card .card-title {
+  margin: 19px 0 10px;
+  color: var(--about-ink);
+  font-size: 1.12rem;
+  font-weight: 700;
+}
+
+.about-page .about-card .card-text {
+  margin: 0;
+  color: var(--about-muted);
+  font-size: .91rem;
+  line-height: 1.75;
+}
+
+.about-page .about-benefit-card {
+  border-top: 3px solid #d9e8fb !important;
+}
+
+.about-page .about-contact-section {
+  padding: 0 0 clamp(58px, 8vw, 88px);
+}
+
+.about-page .about-contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  padding: clamp(25px, 5vw, 42px);
+  border: 1px solid #dce8f7;
+  border-radius: 17px;
+  background: linear-gradient(110deg, #f1f7ff, #f8fbff);
+}
+
+.about-page .about-contact-card h2 {
+  margin-bottom: 10px;
+  font-size: clamp(1.55rem, 2.8vw, 2rem);
+}
+
+.about-page .about-contact-card p {
+  max-width: 540px;
+}
+
+.about-page .about-contact-link {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  flex: 0 0 auto;
+  padding: 0 15px;
+  border: 1px solid #cbdcf2;
+  border-radius: 9px;
+  background: #fff;
+  color: #245eb4;
+  font-size: .87rem;
+  font-weight: 650;
+  text-decoration: none;
+  transition: border-color .18s ease, background-color .18s ease, color .18s ease;
+}
+
+.about-page .about-contact-link:hover {
+  border-color: #9bb9e2;
+  background: #fafdff;
+  color: #194eaa;
+}
+
+.about-page a:focus-visible,
+.about-page button:focus-visible {
+  outline: 3px solid rgba(36, 99, 201, .3);
+  outline-offset: 3px;
+}
+
+@media (max-width: 991.98px) {
+  .about-page .about-hero {
+    padding: 60px 0;
+  }
+
+  .about-page .about-hero-copy {
+    text-align: center;
+  }
+
+  .about-page .about-hero h1,
+  .about-page .about-hero p {
+    margin-right: auto;
+    margin-left: auto;
+  }
+
+  .about-page .about-contact-card {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .about-page .about-hero {
+    padding: 48px 0;
+  }
+
+  .about-page .about-hero-image {
+    aspect-ratio: 1.18 / 1;
+  }
+
+  .about-page .about-purpose-panel {
+    flex-direction: column;
+  }
+
+  .about-page .about-section-heading {
+    margin-bottom: 26px;
+    text-align: left;
+  }
+
+  .about-page .about-contact-link {
+    width: 100%;
+    overflow-wrap: anywhere;
+    font-size: .8rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-page *,
+  .about-page *::before,
+  .about-page *::after {
     scroll-behavior: auto !important;
     transition-duration: .01ms !important;
     animation-duration: .01ms !important;
