@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {
-  Container,
-  Form,
-  Button,
-  Card,
-} from "react-bootstrap";
+import { Button, Form } from "react-bootstrap";
+import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import AuthLayout from "../components/AuthLayout";
 import { loginUser } from "../services/authService";
 import { toast } from "react-toastify";
 
@@ -18,6 +15,7 @@ function Login() {
   });
 
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -85,63 +83,68 @@ function Login() {
   };
 
   return (
-    <Container className="py-5">
-      <Card
-        className="mx-auto shadow-lg p-4"
-        style={{ maxWidth: "500px" }}
-      >
-        <Card.Body>
-          <h2 className="text-center mb-2">
-            Welcome Back!
-          </h2>
+    <AuthLayout
+      eyebrow="Welcome back"
+      title="Keep your learning moving."
+      description="Sign in to continue building the skills that take you further."
+      visualTitle="Make room for what’s next."
+      visualDescription="Pick up where you left off and keep moving toward your next goal."
+    >
+      <Form onSubmit={handleSubmit} className="auth-form">
+        <Form.Group className="auth-field">
+          <Form.Label htmlFor="login-email">Email address</Form.Label>
+          <div className="auth-input-wrap">
+            <Mail className="auth-input-icon" size={18} aria-hidden="true" />
+            <Form.Control
+              id="login-email"
+              type="email"
+              name="email"
+              placeholder="you@example.com"
+              value={formData.email}
+              onChange={handleChange}
+              autoComplete="email"
+              required
+            />
+          </div>
+        </Form.Group>
 
-          <p className="text-center text-muted mb-4">
-            Login to continue your LearnHub journey.
-          </p>
-
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3">
-              <Form.Label>Email Address</Form.Label>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="you@example.com"
-                value={formData.email}
-                onChange={handleChange}
-                autoComplete="email"
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-4">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                autoComplete="current-password"
-                required
-              />
-            </Form.Group>
-
-            <Button
-              type="submit"
-              className="w-100"
-              disabled={loading}
+        <Form.Group className="auth-field">
+          <Form.Label htmlFor="login-password">Password</Form.Label>
+          <div className="auth-input-wrap auth-password-control">
+            <LockKeyhole className="auth-input-icon" size={18} aria-hidden="true" />
+            <Form.Control
+              id="login-password"
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
+              autoComplete="current-password"
+              required
+            />
+            <button
+              type="button"
+              className="auth-password-toggle"
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              aria-pressed={showPassword}
+              aria-controls="login-password"
+              onClick={() => setShowPassword((visible) => !visible)}
             >
-              {loading ? "Logging in..." : "Login to LearnHub"}
-            </Button>
-          </Form>
+              {showPassword ? <EyeOff size={18} aria-hidden="true" /> : <Eye size={18} aria-hidden="true" />}
+            </button>
+          </div>
+        </Form.Group>
 
-          <p className="text-center mt-4 mb-0">
-            Don't have an account?{" "}
-            <Link to="/register">Create Account</Link>
-          </p>
-        </Card.Body>
-      </Card>
-    </Container>
+        <Button type="submit" className="auth-submit" disabled={loading}>
+          <span>{loading ? "Logging in..." : "Login to LearnHub"}</span>
+          {!loading && <ArrowRight size={18} aria-hidden="true" />}
+        </Button>
+      </Form>
+
+      <p className="auth-switch">
+        Don&apos;t have an account? <Link to="/register">Create account</Link>
+      </p>
+    </AuthLayout>
   );
 }
 
