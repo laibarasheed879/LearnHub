@@ -36,7 +36,6 @@ function Footer() {
           <h2>For learners</h2>
           <Link to="/login">Log in</Link>
           <Link to="/register">Create account</Link>
-          <Link to="/courses">Explore courses</Link>
         </nav>
 
         <div className="footer-contact">
