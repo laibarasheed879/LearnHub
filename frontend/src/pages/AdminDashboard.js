@@ -14,8 +14,9 @@ import {
   Badge,
 } from "react-bootstrap";
 import axios from "axios";
+import { API_BASE_URL } from "../services/apiConfig";
 
-const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/courses`;
+const API_URL = `${API_BASE_URL}/courses`;
 
 const emptyForm = {
   title: "",
