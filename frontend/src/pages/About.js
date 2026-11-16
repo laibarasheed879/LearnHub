@@ -1,103 +1,223 @@
+import {
+  ArrowRight,
+  BookOpen,
+  Compass,
+  Eye,
+  Mail,
+  Target,
+} from "lucide-react";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-import { Container, Row, Col, Card } from "react-bootstrap";
-import { FaGraduationCap, FaBullseye, FaUsers } from "react-icons/fa";
+const benefits = [
+  {
+    icon: BookOpen,
+    title: "Discover courses",
+    description:
+      "Explore learning opportunities that support your interests and goals.",
+  },
+  {
+    icon: Compass,
+    title: "Learn at your pace",
+    description:
+      "Build practical skills through digital learning that fits your journey.",
+  },
+  {
+    icon: Target,
+    title: "Keep making progress",
+    description:
+      "Track your learning and take steady steps toward what you want to achieve.",
+  },
+];
 
-function About() {
+function AboutHero() {
   return (
-    <div className="about-page">
-      <section className="about-hero">
-        <Container>
-          <span className="about-label">ABOUT LEARNHUB</span>
-          <h1>Learn Today. Grow Tomorrow.</h1>
-          <p>
-            Your journey to new skills and better opportunities starts here.
-          </p>
-        </Container>
-      </section>
-
-      <Container className="py-5">
-        <Row className="align-items-center g-4 mb-5">
-          <Col md={6}>
-            <h2>Welcome to LearnHub</h2>
+    <section className="about-hero">
+      <Container>
+        <Row className="align-items-center g-5">
+          <Col lg={6} className="about-hero-copy">
+            <span className="about-label">ABOUT LEARNHUB</span>
+            <h1>
+              Learn today.
+              <span> Grow tomorrow.</span>
+            </h1>
             <p>
-              LearnHub is an online learning platform designed to help
-              students develop practical skills through accessible,
-              beginner-friendly courses.
+              LearnHub helps students discover courses and strengthen their
+              skills through accessible digital learning.
             </p>
-            <p>
-              Whether you are starting your learning journey or improving
-              your existing skills, LearnHub helps you take the next step
-              with confidence.
-            </p>
+            <Button
+              as={Link}
+              to="/courses"
+              className="about-button"
+            >
+              Explore courses
+              <ArrowRight size={17} aria-hidden="true" />
+            </Button>
           </Col>
-
-          <Col md={6}>
-            <div className="about-highlight">
-              <FaGraduationCap className="about-main-icon" />
-              <h3>Learning Made Simple</h3>
-              <p>
-                Explore courses, track your learning and build skills
-                at your own pace.
-              </p>
+          <Col lg={6}>
+            <div className="about-image-frame">
+              <img
+                className="about-hero-image"
+                src="/images/learning-auth-panel.png"
+                alt="A learner studying online with a laptop"
+                decoding="async"
+              />
             </div>
           </Col>
         </Row>
+      </Container>
+    </section>
+  );
+}
 
-        <div className="text-center mb-4">
-          <h2>What Makes LearnHub Special?</h2>
-          <p>Designed to support your learning journey.</p>
-        </div>
-
-        <Row className="g-4">
-          <Col md={4}>
-            <Card className="about-card h-100">
-              <Card.Body>
-                <FaBullseye className="about-icon" />
-                <Card.Title>Our Mission</Card.Title>
-                <Card.Text>
-                  To make learning accessible and help students develop
-                  useful skills for their future.
-                </Card.Text>
-              </Card.Body>
-            </Card>
+function PurposeSection() {
+  return (
+    <section className="about-section about-purpose-section">
+      <Container>
+        <Row className="align-items-center g-4 g-lg-5">
+          <Col lg={6}>
+            <span className="about-section-kicker">WHY LEARNHUB</span>
+            <h2>Learning for your next step</h2>
+            <p>
+              LearnHub is a digital learning platform where students can find
+              courses, develop practical skills, and keep moving toward their
+              goals. Whether you are starting something new or building on what
+              you already know, we make it easier to take the next step.
+            </p>
           </Col>
-
-          <Col md={4}>
-            <Card className="about-card h-100">
-              <Card.Body>
-                <FaGraduationCap className="about-icon" />
-                <Card.Title>Quality Learning</Card.Title>
-                <Card.Text>
-                  Provide an organised learning experience with courses
-                  for different interests and skill levels.
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </Col>
-
-          <Col md={4}>
-            <Card className="about-card h-100">
-              <Card.Body>
-                <FaUsers className="about-icon" />
-                <Card.Title>Student Focused</Card.Title>
-                <Card.Text>
-                  Help learners discover courses, monitor progress and
-                  keep moving towards their goals.
-                </Card.Text>
-              </Card.Body>
-            </Card>
+          <Col lg={6}>
+            <div className="about-purpose-panel">
+              <div className="about-purpose-icon" aria-hidden="true">
+                <BookOpen size={22} />
+              </div>
+              <div>
+                <h3>Built around learners</h3>
+                <p>
+                  A clear place to explore learning, follow your progress, and
+                  build confidence one skill at a time.
+                </p>
+              </div>
+            </div>
           </Col>
         </Row>
+      </Container>
+    </section>
+  );
+}
 
-        <div className="about-cta text-center mt-5">
-          <h2>Ready to Start Learning?</h2>
-          <p>Explore our courses and find your next learning opportunity.</p>
-          <a href="/courses" className="btn about-button">
-            Explore Courses
+function DirectionSection() {
+  const direction = [
+    {
+      icon: Target,
+      title: "Our mission",
+      description:
+        "Make digital learning accessible and help students build useful skills for the future.",
+    },
+    {
+      icon: Eye,
+      title: "Our vision",
+      description:
+        "A future where every learner can discover new knowledge and grow with confidence.",
+    },
+  ];
+
+  return (
+    <section className="about-section about-direction-section">
+      <Container>
+        <div className="about-section-heading">
+          <span className="about-section-kicker">OUR PURPOSE</span>
+          <h2>A clear direction for better learning</h2>
+          <p>
+            We believe the right learning experience can open doors to new
+            possibilities.
+          </p>
+        </div>
+        <Row className="g-4">
+          {direction.map(({ icon: Icon, title, description }) => (
+            <Col md={6} key={title}>
+              <Card className="about-card about-direction-card h-100">
+                <Card.Body>
+                  <span className="about-card-icon" aria-hidden="true">
+                    <Icon size={21} />
+                  </span>
+                  <Card.Title as="h3">{title}</Card.Title>
+                  <Card.Text>{description}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </section>
+  );
+}
+
+function BenefitsSection() {
+  return (
+    <section className="about-section about-benefits-section">
+      <Container>
+        <div className="about-section-heading">
+          <span className="about-section-kicker">THE LEARNHUB EXPERIENCE</span>
+          <h2>Tools for a more confident learning journey</h2>
+          <p>
+            Discover the parts of LearnHub designed to help you move forward.
+          </p>
+        </div>
+        <Row className="g-4">
+          {benefits.map(({ icon: Icon, title, description }) => (
+            <Col md={4} key={title}>
+              <Card className="about-card about-benefit-card h-100">
+                <Card.Body>
+                  <span className="about-card-icon" aria-hidden="true">
+                    <Icon size={21} />
+                  </span>
+                  <Card.Title as="h3">{title}</Card.Title>
+                  <Card.Text>{description}</Card.Text>
+                </Card.Body>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </Container>
+    </section>
+  );
+}
+
+function ContactSection() {
+  return (
+    <section className="about-contact-section">
+      <Container>
+        <div className="about-contact-card">
+          <div>
+            <span className="about-section-kicker">GET IN TOUCH</span>
+            <h2>Questions about LearnHub?</h2>
+            <p>
+              We would be glad to hear from you. Reach us using the contact
+              email below.
+            </p>
+          </div>
+          <a
+            className="about-contact-link"
+            href="mailto:learnhubacademy@gmail.com"
+          >
+            <Mail size={18} aria-hidden="true" />
+            learnhubacademy@gmail.com
           </a>
         </div>
       </Container>
-    </div>
+    </section>
+  );
+}
+
+function About() {
+  return (
+    <main className="about-page">
+      <AboutHero />
+      <PurposeSection />
+      <DirectionSection />
+      <BenefitsSection />
+      <ContactSection />
+    </main>
   );
 }
 

@@ -1,5 +1,17 @@
 
 import { useEffect, useState } from "react";
+import {
+  ArrowUpRight,
+  BookOpen,
+  ChevronRight,
+  Globe,
+  LayoutDashboard,
+  LogOut,
+  Pencil,
+  Plus,
+  Tags,
+  Trash2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   Container,
@@ -14,8 +26,9 @@ import {
   Badge,
 } from "react-bootstrap";
 import axios from "axios";
+import { API_BASE_URL } from "../services/apiConfig";
 
-const API_URL = `${process.env.REACT_APP_API_URL || "http://localhost:5000/api"}/courses`;
+const API_URL = `${API_BASE_URL}/courses`;
 
 const emptyForm = {
   title: "",
@@ -29,6 +42,14 @@ const emptyForm = {
 };
 
 function AdminDashboard() {
+  const [adminUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("learnhubUser") || "null");
+    } catch {
+      return null;
+    }
+  });
+  const [activeSection, setActiveSection] = useState("overview");
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -36,13 +57,20 @@ function AdminDashboard() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [form, setForm] = useState({ ...emptyForm });
+  const adminName =
+    adminUser?.name?.trim() ||
+    adminUser?.email?.split("@")[0] ||
+    "Administrator";
+  const categoryCount = new Set(
+    courses.map((course) => course.category?.trim()).filter(Boolean)
+  ).size;
 
   const loadCourses = async () => {
     try {
       const response = await axios.get(API_URL);
       setCourses(response.data);
     } catch {
-      setError("Courses are not available . Please check backend.");
+      setError("Courses could not be loaded. Please check the backend connection.");
     } finally {
       setLoading(false);
     }
@@ -59,6 +87,11 @@ function AdminDashboard() {
   const resetForm = () => {
     setForm({ ...emptyForm });
     setEditingId(null);
+  };
+
+  const handleAddCourse = () => {
+    resetForm();
+    setActiveSection("add-course");
   };
 
   const handleSubmit = async (e) => {
@@ -109,6 +142,7 @@ function AdminDashboard() {
   };
 
   const handleEdit = (course) => {
+    setActiveSection("add-course");
     setEditingId(course._id);
     setForm({
       title: course.title || "",
@@ -170,82 +204,163 @@ function AdminDashboard() {
 
   return (
     <div className="dashboard-page admin-dashboard-page">
-      <Container fluid className="py-4 px-3 px-lg-4">
-        <Row className="g-4">
-          <Col lg={3} xl={2}>
-            <Card className="dashboard-sidebar admin-sidebar">
-              <Card.Body className="d-flex flex-column">
-                <Link to="/" className="admin-sidebar-brand">
-                  Learn<span>Hub</span>
-                </Link>
+      <Container fluid className="admin-dashboard-container py-3 py-xl-4 px-3 px-xl-4">
+        <Row className="g-4 admin-layout-row">
+          <Col lg={3} xl={2} className="admin-sidebar-column">
+            <aside className="admin-sidebar">
+              <Link to="/" className="admin-sidebar-brand" aria-label="LearnHub home">
+                Learn<span>Hub</span>
+              </Link>
+              <p className="admin-workspace-label">ADMIN WORKSPACE</p>
 
-                <p className="sidebar-label mt-4">ADMIN WORKSPACE</p>
-
-                <a className="sidebar-link active" href="#overview">
-                  <span>▦</span> Overview
-                </a>
-                <a className="sidebar-link" href="#manage-courses">
-                  <span>▣</span> Manage Courses
+              <nav className="admin-sidebar-nav" aria-label="Admin workspace">
+                <a
+                  className={`sidebar-link ${activeSection === "overview" ? "active" : ""}`}
+                  href="#overview"
+                  aria-current={activeSection === "overview" ? "page" : undefined}
+                  onClick={() => setActiveSection("overview")}
+                >
+                  <LayoutDashboard size={18} aria-hidden="true" />
+                  <span>Overview</span>
                 </a>
                 <a
-                  className="sidebar-link"
-                  href="#add-course"
-                  onClick={() => {
-                    setEditingId(null);
-                    setForm({ ...emptyForm });
-                  }}
+                  className={`sidebar-link ${activeSection === "manage-courses" ? "active" : ""}`}
+                  href="#manage-courses"
+                  aria-current={activeSection === "manage-courses" ? "page" : undefined}
+                  onClick={() => setActiveSection("manage-courses")}
                 >
-                  <span>＋</span> Add Course
+                  <BookOpen size={18} aria-hidden="true" />
+                  <span>Manage courses</span>
+                </a>
+                <a
+                  className={`sidebar-link ${activeSection === "add-course" ? "active" : ""}`}
+                  href="#add-course"
+                  aria-current={activeSection === "add-course" ? "page" : undefined}
+                  onClick={handleAddCourse}
+                >
+                  <Plus size={18} aria-hidden="true" />
+                  <span>Add course</span>
                 </a>
                 <Link to="/" className="sidebar-link">
-                  <span>⌂</span> View Website
+                  <Globe size={18} aria-hidden="true" />
+                  <span>View website</span>
                 </Link>
+              </nav>
 
-                <div className="sidebar-bottom">
-                  <div className="admin-profile">
-                    <div className="admin-avatar">A</div>
-                    <div>
-                      <strong>Administrator</strong>
-                      <small>Manage your platform</small>
-                    </div>
+              <div className="sidebar-bottom">
+                <div className="admin-profile">
+                  <div className="admin-avatar" aria-hidden="true">
+                    {adminName.charAt(0).toUpperCase()}
                   </div>
-
-                  <button
-                    type="button"
-                    className="sidebar-link logout-link"
-                    onClick={logout}
-                  >
-                    <span>↪</span> Logout
-                  </button>
+                  <div className="admin-profile-copy">
+                    <strong>{adminName}</strong>
+                    <small>Administrator</small>
+                  </div>
                 </div>
-              </Card.Body>
-            </Card>
+                <button
+                  type="button"
+                  className="sidebar-link logout-link"
+                  onClick={logout}
+                >
+                  <LogOut size={18} aria-hidden="true" />
+                  <span>Sign out</span>
+                </button>
+              </div>
+            </aside>
           </Col>
 
-          <Col lg={9} xl={10}>
+          <Col lg={9} xl={10} className="admin-content-column">
             <section id="overview" className="admin-main-content">
-              <div className="dashboard-welcome admin-welcome mb-4">
-                <div>
-                  <p className="dashboard-eyebrow">
-                    ADMIN CONTROL CENTER
-                  </p>
-                  <h1>Admin Dashboard</h1>
-                  <p>
-                    Manage your courses and keep LearnHub up to date.
-                  </p>
+              <div className="admin-topbar">
+                <div className="admin-breadcrumb">
+                  <span>Workspace</span>
+                  <ChevronRight size={15} aria-hidden="true" />
+                  <strong>Overview</strong>
                 </div>
+                <Link to="/" className="admin-topbar-link">
+                  <Globe size={16} aria-hidden="true" />
+                  <span>View website</span>
+                  <ArrowUpRight size={15} aria-hidden="true" />
+                </Link>
+              </div>
 
-                <div className="admin-total">
-                  <small>Total Courses</small>
-                  <h2>{courses.length}</h2>
-                  <span>Courses in your catalogue</span>
+              <div className="admin-welcome mb-4">
+                <div>
+                  <p className="dashboard-eyebrow">LEARNHUB ADMIN</p>
+                  <h1>Welcome back, {adminName.split(" ")[0]}</h1>
+                  <p>Manage your course catalogue and learning content.</p>
+                </div>
+                <div className="admin-welcome-note">
+                  <BookOpen size={18} aria-hidden="true" />
+                  <span>Course operations</span>
                 </div>
               </div>
+
+              <section className="admin-stats-grid" aria-label="Catalogue statistics">
+                <Card className="admin-stat-card">
+                  <Card.Body>
+                    <div className="admin-stat-icon" aria-hidden="true">
+                      <BookOpen size={19} />
+                    </div>
+                    <div className="admin-stat-copy">
+                      <span>Total courses</span>
+                      <strong>{loading ? "—" : courses.length}</strong>
+                      <small>Courses in your catalogue</small>
+                    </div>
+                  </Card.Body>
+                </Card>
+                <Card className="admin-stat-card">
+                  <Card.Body>
+                    <div className="admin-stat-icon admin-stat-icon-muted" aria-hidden="true">
+                      <Tags size={19} />
+                    </div>
+                    <div className="admin-stat-copy">
+                      <span>Course categories</span>
+                      <strong>{loading ? "—" : categoryCount}</strong>
+                      <small>Distinct categories in the catalogue</small>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </section>
+
+              <section className="admin-quick-actions" aria-labelledby="quick-actions-title">
+                <div>
+                  <p className="admin-section-kicker">QUICK ACTIONS</p>
+                  <h2 id="quick-actions-title">Keep your catalogue moving</h2>
+                </div>
+                <div className="admin-action-links">
+                  <a href="#add-course" className="admin-action-link" onClick={handleAddCourse}>
+                    <span className="admin-action-icon" aria-hidden="true">
+                      <Plus size={18} />
+                    </span>
+                    <span className="admin-action-copy">
+                      <strong>Add a course</strong>
+                      <small>Create a new catalogue entry</small>
+                    </span>
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </a>
+                  <a
+                    href="#manage-courses"
+                    className="admin-action-link"
+                    onClick={() => setActiveSection("manage-courses")}
+                  >
+                    <span className="admin-action-icon admin-action-icon-muted" aria-hidden="true">
+                      <BookOpen size={18} />
+                    </span>
+                    <span className="admin-action-copy">
+                      <strong>Manage courses</strong>
+                      <small>Review and update your catalogue</small>
+                    </span>
+                    <ArrowUpRight size={17} aria-hidden="true" />
+                  </a>
+                </div>
+              </section>
 
               {message && (
                 <Alert
                   variant="success"
                   dismissible
+                  role="status"
                   onClose={() => setMessage("")}
                 >
                   {message}
@@ -256,6 +371,7 @@ function AdminDashboard() {
                 <Alert
                   variant="danger"
                   dismissible
+                  role="alert"
                   onClose={() => setError("")}
                 >
                   {error}
@@ -269,23 +385,27 @@ function AdminDashboard() {
                 <Card.Body className="p-3 p-md-4">
                   <div className="admin-section-heading mb-4">
                     <div>
-                      <p className="dashboard-eyebrow">
-                        COURSE MANAGEMENT
+                      <p className="admin-section-kicker">COURSE MANAGEMENT</p>
+                      <h2>
+                        {editingId ? "Edit course" : "Add a course"}
+                      </h2>
+                      <p className="admin-section-description">
+                        {editingId
+                          ? "Update the details for this catalogue entry."
+                          : "Add course details to your LearnHub catalogue."}
                       </p>
-                      <h4>
-                        {editingId ? "Edit Course" : "Add New Course"}
-                      </h4>
                     </div>
                     <Badge bg={editingId ? "warning" : "primary"}>
-                      {editingId ? "EDIT MODE" : "NEW COURSE"}
+                      {editingId ? "EDITING" : "NEW COURSE"}
                     </Badge>
                   </div>
 
                   <Form onSubmit={handleSubmit}>
                     <Row className="g-3">
                       <Col md={6}>
-                        <Form.Label>Course Title</Form.Label>
+                        <Form.Label htmlFor="admin-course-title">Course Title</Form.Label>
                         <Form.Control
+                          id="admin-course-title"
                           name="title"
                           value={form.title}
                           onChange={handleChange}
@@ -295,8 +415,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col md={6}>
-                        <Form.Label>Instructor</Form.Label>
+                        <Form.Label htmlFor="admin-course-instructor">Instructor</Form.Label>
                         <Form.Control
+                          id="admin-course-instructor"
                           name="instructor"
                           value={form.instructor}
                           onChange={handleChange}
@@ -306,8 +427,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col md={6}>
-                        <Form.Label>Category</Form.Label>
+                        <Form.Label htmlFor="admin-course-category">Category</Form.Label>
                         <Form.Control
+                          id="admin-course-category"
                           name="category"
                           value={form.category}
                           onChange={handleChange}
@@ -317,8 +439,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col md={6}>
-                        <Form.Label>Price (PKR)</Form.Label>
+                        <Form.Label htmlFor="admin-course-price">Price (PKR)</Form.Label>
                         <Form.Control
+                          id="admin-course-price"
                           type="number"
                           name="price"
                           min="0"
@@ -329,8 +452,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col md={6}>
-                        <Form.Label>Duration</Form.Label>
+                        <Form.Label htmlFor="admin-course-duration">Duration</Form.Label>
                         <Form.Control
+                          id="admin-course-duration"
                           name="duration"
                           value={form.duration}
                           onChange={handleChange}
@@ -340,8 +464,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col md={6}>
-                        <Form.Label>Course Level</Form.Label>
+                        <Form.Label htmlFor="admin-course-level">Course Level</Form.Label>
                         <Form.Select
+                          id="admin-course-level"
                           name="level"
                           value={form.level}
                           onChange={handleChange}
@@ -353,8 +478,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col xs={12}>
-                        <Form.Label>Image URL (optional)</Form.Label>
+                        <Form.Label htmlFor="admin-course-image">Image URL (optional)</Form.Label>
                         <Form.Control
+                          id="admin-course-image"
                           name="image"
                           type="url"
                           value={form.image}
@@ -364,8 +490,9 @@ function AdminDashboard() {
                       </Col>
 
                       <Col xs={12}>
-                        <Form.Label>Description</Form.Label>
+                        <Form.Label htmlFor="admin-course-description">Description</Form.Label>
                         <Form.Control
+                          id="admin-course-description"
                           as="textarea"
                           rows={3}
                           name="description"
@@ -415,43 +542,52 @@ function AdminDashboard() {
                 <Card.Body className="p-3 p-md-4">
                   <div className="admin-section-heading mb-3">
                     <div>
-                      <p className="dashboard-eyebrow">
-                        YOUR CATALOGUE
+                      <p className="admin-section-kicker">YOUR CATALOGUE</p>
+                      <h2>Manage courses</h2>
+                      <p className="admin-section-description">
+                        Course information is loaded from your existing catalogue.
                       </p>
-                      <h4>Manage Courses</h4>
                     </div>
-                    <Badge bg="secondary">{courses.length} total</Badge>
+                    <Badge bg="light" text="dark" className="admin-count-badge">
+                      {loading ? "Loading" : `${courses.length} ${courses.length === 1 ? "course" : "courses"}`}
+                    </Badge>
                   </div>
 
                   {loading ? (
                     <div className="text-center py-5">
-                      <Spinner animation="border" />
+                      <Spinner animation="border" role="status" />
                       <p className="mt-2">Loading courses...</p>
                     </div>
                   ) : courses.length === 0 ? (
                     <div className="admin-empty-state">
-                      <h5>No courses yet</h5>
+                      <BookOpen size={24} aria-hidden="true" />
+                      <h3>No courses in the catalogue</h3>
                       <p>Add your first course using the form above.</p>
                     </div>
                   ) : (
                     <Table responsive hover className="admin-course-table">
                       <thead>
                         <tr>
-                          <th>Course</th>
-                          <th>Category</th>
-                          <th>Level</th>
-                          <th>Price</th>
-                          <th>Actions</th>
+                          <th scope="col">Course</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Level</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Actions</th>
                         </tr>
                       </thead>
                       <tbody>
                         {courses.map((course) => (
                           <tr key={course._id}>
-                            <td>
+                            <td className="admin-course-name-cell">
                               <strong>{course.title}</strong>
                               <small className="d-block text-secondary">
                                 {course.instructor}
                               </small>
+                              {course.description && (
+                                <small className="admin-course-description d-block">
+                                  {course.description}
+                                </small>
+                              )}
                             </td>
                             <td>{course.category}</td>
                             <td>
@@ -468,16 +604,20 @@ function AdminDashboard() {
                                 <Button
                                   size="sm"
                                   variant="outline-primary"
+                                  aria-label={`Edit ${course.title}`}
                                   onClick={() => handleEdit(course)}
                                 >
-                                  Edit
+                                  <Pencil size={14} aria-hidden="true" />
+                                  <span>Edit</span>
                                 </Button>
                                 <Button
                                   size="sm"
                                   variant="outline-danger"
+                                  aria-label={`Delete ${course.title}`}
                                   onClick={() => handleDelete(course)}
                                 >
-                                  Delete
+                                  <Trash2 size={14} aria-hidden="true" />
+                                  <span>Delete</span>
                                 </Button>
                               </div>
                             </td>
