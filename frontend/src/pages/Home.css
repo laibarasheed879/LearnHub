@@ -252,75 +252,19 @@
 
 .lh-home-hero-photo-wrap {
   overflow: hidden;
+  aspect-ratio: 3 / 2;
   border: 7px solid rgba(255, 255, 255, 0.92);
   border-radius: 28px;
-  background: #dceafa;
+  background: #eaf2ff;
   box-shadow: 0 28px 64px rgba(20, 53, 99, 0.17);
 }
 
 .lh-home-hero-photo {
   display: block;
   width: 100%;
-  height: clamp(350px, 41vw, 485px);
-  object-fit: cover;
-  object-position: 58% center;
-}
-
-.lh-home-photo-label {
-  position: absolute;
-  right: -4px;
-  bottom: 45px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 235px;
-  padding: 14px 17px;
-  border: 1px solid rgba(224, 234, 247, 0.95);
-  border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 14px 34px rgba(24, 56, 101, 0.13);
-}
-
-.lh-home-photo-label-icon {
-  display: grid;
-  flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
-  place-items: center;
-  border-radius: 12px;
-  background: #eaf2ff;
-  color: var(--lh-blue);
-}
-
-.lh-home-photo-label strong,
-.lh-home-photo-label small {
-  display: block;
-}
-
-.lh-home-photo-label strong {
-  color: var(--lh-ink);
-  font-size: 0.85rem;
-}
-
-.lh-home-photo-label small {
-  margin-top: 2px;
-  color: #72819a;
-  font-size: 0.72rem;
-}
-
-.lh-home-photo-mark {
-  position: absolute;
-  top: 26px;
-  right: 32px;
-  display: grid;
-  width: 54px;
-  height: 54px;
-  place-items: center;
-  border: 1px solid #e2ebf7;
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: 0 10px 24px rgba(24, 56, 101, 0.1);
-  color: var(--lh-blue);
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 .lh-home-section {
@@ -871,10 +815,6 @@
     margin: 0 auto;
   }
 
-  .lh-home-hero-photo {
-    height: min(58vw, 480px);
-  }
-
   .lh-home-section {
     padding: 70px 0;
   }
@@ -898,10 +838,6 @@
     font-size: 0.98rem;
   }
 
-  .lh-home-hero-photo {
-    height: 370px;
-  }
-
   .lh-home-hero-actions {
     margin-top: 19px;
   }
@@ -923,10 +859,6 @@
   .lh-home-hero h1 {
     max-width: 570px;
     font-size: clamp(2.65rem, 9vw, 4rem);
-  }
-
-  .lh-home-hero-photo {
-    height: min(78vw, 420px);
   }
 
   .lh-home-section-heading {
@@ -990,42 +922,9 @@
     border-radius: 21px;
   }
 
-  .lh-home-hero-photo {
-    height: 74vw;
-    min-height: 280px;
-    max-height: 380px;
-  }
-
   .lh-home-hero-visual::before {
     left: 34px;
     border-radius: 25px;
-  }
-
-  .lh-home-photo-label {
-    right: -1px;
-    bottom: 26px;
-    min-width: 0;
-    padding: 10px 12px;
-  }
-
-  .lh-home-photo-label-icon {
-    width: 34px;
-    height: 34px;
-  }
-
-  .lh-home-photo-label strong {
-    font-size: 0.76rem;
-  }
-
-  .lh-home-photo-label small {
-    font-size: 0.65rem;
-  }
-
-  .lh-home-photo-mark {
-    top: 18px;
-    right: 19px;
-    width: 44px;
-    height: 44px;
   }
 
   .lh-home-category-filters {

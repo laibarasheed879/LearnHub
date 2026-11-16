@@ -229,17 +229,10 @@ function Home() {
               <div className="lh-home-hero-visual">
                 <div className="lh-home-hero-photo-wrap">
                   <img
-                    src="/images/learnhub-student-learning.png"
-                    alt="A student learning at a laptop in a bright, comfortable study space"
+                    src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/75a9fa74-716a-4fce-a5f2-24f089810a67-f7PKXnhuBjBDtH1uvj68SWFebcJkIm.png"
+                    alt="Two students learning online with laptops, course progress, and certification graphics"
                     className="lh-home-hero-photo"
                   />
-                </div>
-                <div className="lh-home-photo-label">
-                  <span className="lh-home-photo-label-icon"><BookOpen size={19} /></span>
-                  <span><strong>Make learning yours</strong><small>One focused lesson at a time</small></span>
-                </div>
-                <div className="lh-home-photo-mark" aria-hidden="true">
-                  <GraduationCap size={22} />
                 </div>
               </div>
             </Col>
