@@ -1,10 +1,12 @@
 
-import { useState, useEffect } from "react";
-import { Navbar, Nav, Container, Button } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { ArrowRight, BookOpen } from "lucide-react";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 function AppNavbar() {
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState(false);
   const [user, setUser] = useState(() => {
     try {
       return JSON.parse(localStorage.getItem("learnhubUser")) || null;
@@ -35,64 +37,93 @@ function AppNavbar() {
     localStorage.removeItem("learnhubToken");
     localStorage.removeItem("learnhubUser");
     setUser(null);
+    setExpanded(false);
+    window.dispatchEvent(new Event("learnhub-auth-change"));
     navigate("/");
   };
 
+  const dashboardPath =
+    user?.role === "admin" ? "/admin-dashboard" : "/student-dashboard";
+
   return (
-    <Navbar expand="lg" className="learnhub-navbar" sticky="top">
-      <Container>
+    <Navbar
+      expand="lg"
+      className="learnhub-navbar"
+      sticky="top"
+      collapseOnSelect
+      expanded={expanded}
+      onToggle={setExpanded}
+    >
+      <Container className="learnhub-navbar-container">
         <Navbar.Brand as={Link} to="/" className="learnhub-brand">
-          Learn<span>Hub</span>
+          <span className="learnhub-brand-mark" aria-hidden="true">
+            <BookOpen size={18} strokeWidth={2.1} />
+          </span>
+          <span className="learnhub-brand-name">
+            Learn<span>Hub</span>
+          </span>
         </Navbar.Brand>
 
-        <Navbar.Toggle aria-controls="learnhub-navbar" />
+        <Navbar.Toggle
+          className="learnhub-menu-toggle"
+          aria-controls="learnhub-navbar"
+          aria-label={expanded ? "Close navigation menu" : "Open navigation menu"}
+        />
 
         <Navbar.Collapse id="learnhub-navbar">
           <Nav className="ms-auto align-items-lg-center">
-            <Nav.Link as={Link} to="/">
+            <Nav.Link as={NavLink} to="/" end eventKey="home">
               Home
             </Nav.Link>
-
-            <Nav.Link as={Link} to="/courses">
+            <Nav.Link as={NavLink} to="/about" eventKey="about">
+              About
+            </Nav.Link>
+            <Nav.Link as={NavLink} to="/courses" eventKey="courses">
               Courses
             </Nav.Link>
-             <Nav.Link as={Link} to="/about">
-               About
-              </Nav.Link>
+
             {user ? (
               <>
-               <Nav.Link
-  as={Link}
-  to={
-    user?.role === "admin"
-      ? "/admin-dashboard"
-      : "/student-dashboard"
-  }
->
-  Dashboard
-</Nav.Link>
-
+                <Nav.Link
+                  as={NavLink}
+                  to={dashboardPath}
+                  eventKey="dashboard"
+                  className="navbar-dashboard-link"
+                >
+                  Dashboard
+                </Nav.Link>
                 <span className="navbar-welcome mx-lg-3 my-2 my-lg-0">
-                Welcome {user.name}
+                  Welcome, <strong>{user.name}</strong>
                 </span>
-
                 <Button
-                  variant="outline-info"
-                  size="sm"
+                  type="button"
+                  variant="outline-primary"
+                  className="navbar-logout-button"
                   onClick={handleLogout}
                 >
-                  Logout
+                  Log out
                 </Button>
               </>
             ) : (
               <>
-                <Nav.Link as={Link} to="/login">
-                  Login
+                <Nav.Link
+                  as={NavLink}
+                  to="/login"
+                  eventKey="login"
+                  className="navbar-login-link"
+                >
+                  Log in
                 </Nav.Link>
-
-                <Nav.Link as={Link} to="/register">
-                  Register
-                </Nav.Link>
+                <Button
+                  as={NavLink}
+                  to="/register"
+                  eventKey="register"
+                  className="navbar-register-button"
+                  onClick={() => setExpanded(false)}
+                >
+                  Create account
+                  <ArrowRight size={15} aria-hidden="true" />
+                </Button>
               </>
             )}
           </Nav>
