@@ -29,6 +29,7 @@ export function CourseDetailHero({
   instructorName,
   courseDuration,
   courseLevel,
+  coursePrice,
   onEnroll,
   enrolling,
   imageUnavailable,
@@ -82,6 +83,11 @@ export function CourseDetailHero({
                   <strong>{courseLevel}</strong>
                 </span>
               </div>
+            </div>
+
+            <div className="course-detail-hero-price">
+              <span>Course price</span>
+              <strong>{coursePrice}</strong>
             </div>
 
             <Button
@@ -163,7 +169,7 @@ export function CourseDetailInformation({
           </span>
           <div>
             <span className="course-detail-section-label">YOUR LEARNING PATH</span>
-            <h2 id="course-content-title">Course content</h2>
+            <h2 id="course-content-title">What you&apos;ll learn</h2>
           </div>
         </div>
         <div className="course-detail-unavailable-note">

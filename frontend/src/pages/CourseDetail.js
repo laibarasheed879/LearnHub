@@ -171,6 +171,7 @@ function CourseDetail() {
         instructorName={instructorName}
         courseDuration={courseDuration}
         courseLevel={courseLevel}
+        coursePrice={coursePrice}
         onEnroll={handleEnroll}
         enrolling={enrolling}
         imageUnavailable={imageUnavailable}

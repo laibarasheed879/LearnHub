@@ -2997,6 +2997,28 @@ footer a:hover {
   color: #1d4ed8 !important;
 }
 
+.course-detail-hero-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 9px;
+  margin: 0 0 17px;
+}
+
+.course-detail-hero-price span {
+  color: #73839a;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.course-detail-hero-price strong {
+  color: #183d70;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+  overflow-wrap: anywhere;
+}
+
 .course-detail-hero-cta {
   min-width: 175px;
 }
