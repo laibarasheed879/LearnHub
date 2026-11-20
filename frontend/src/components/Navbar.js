@@ -42,8 +42,11 @@ function AppNavbar() {
     navigate("/");
   };
 
-  const dashboardPath =
-    user?.role === "admin" ? "/admin-dashboard" : "/student-dashboard";
+  const dashboardPath = {
+    admin: "/admin-dashboard",
+    instructor: "/instructor-dashboard",
+    student: "/student-dashboard",
+  }[user?.role];
 
   return (
     <Navbar
@@ -84,14 +87,16 @@ function AppNavbar() {
 
             {user ? (
               <>
-                <Nav.Link
-                  as={NavLink}
-                  to={dashboardPath}
-                  eventKey="dashboard"
-                  className="navbar-dashboard-link"
-                >
-                  Dashboard
-                </Nav.Link>
+                {dashboardPath && (
+                  <Nav.Link
+                    as={NavLink}
+                    to={dashboardPath}
+                    eventKey="dashboard"
+                    className="navbar-dashboard-link"
+                  >
+                    Dashboard
+                  </Nav.Link>
+                )}
                 <span className="navbar-welcome mx-lg-3 my-2 my-lg-0">
                   Welcome, <strong>{user.name}</strong>
                 </span>

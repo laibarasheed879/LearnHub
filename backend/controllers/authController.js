@@ -6,10 +6,17 @@ const jwt = require("jsonwebtoken");
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const requestedRole = req.body.role || "student";
 
     if (!name || !email || !password) {
       return res.status(400).json({
         message: "Please fill in all fields",
+      });
+    }
+
+    if (!["student", "instructor"].includes(requestedRole)) {
+      return res.status(400).json({
+        message: "Please choose a valid registration role.",
       });
     }
 
@@ -35,6 +42,7 @@ const registerUser = async (req, res) => {
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
+      role: requestedRole,
     });
 
     return res.status(201).json({
@@ -47,6 +55,11 @@ const registerUser = async (req, res) => {
       },
     });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({
+        message: "Email already registered",
+      });
+    }
     console.error("Registration error:", error.message);
     return res.status(500).json({
       message: "Registration failed",
@@ -89,7 +102,7 @@ const loginUser = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, name: user.name, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );

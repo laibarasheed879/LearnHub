@@ -66,11 +66,12 @@ function Login() {
 
       // Navigate according to account role
       setTimeout(() => {
-        if (data.user.role === "admin") {
-          navigate("/admin-dashboard", { replace: true });
-        } else {
-          navigate("/student-dashboard", { replace: true });
-        }
+        const dashboardByRole = {
+          admin: "/admin-dashboard",
+          instructor: "/instructor-dashboard",
+          student: "/student-dashboard",
+        };
+        navigate(dashboardByRole[data.user.role] || "/", { replace: true });
       }, 800);
     } catch (err) {
       toast.error(

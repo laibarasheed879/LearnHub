@@ -1,7 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Button, Container, Spinner } from "react-bootstrap";
+import { Alert, Button, Card, Container, Spinner } from "react-bootstrap";
 import { ArrowLeft, BookOpen, Info } from "lucide-react";
 import { toast } from "react-toastify";
 import {
@@ -11,6 +11,10 @@ import {
 } from "../components/CourseDetailSections";
 import { getCourseById } from "../services/courseService";
 import { enrollInCourse } from "../services/enrollmentService";
+import {
+  downloadCourseLesson,
+  getCourseLessons,
+} from "../services/lessonService";
 
 const formatCoursePrice = (value) => {
   if (value === null || value === undefined || value === "") {
@@ -35,6 +39,9 @@ function CourseDetail() {
   const [retryCount, setRetryCount] = useState(0);
   const [imageUnavailable, setImageUnavailable] = useState(false);
   const [enrolling, setEnrolling] = useState(false);
+  const [lessons, setLessons] = useState([]);
+  const [lessonsLoading, setLessonsLoading] = useState(false);
+  const [lessonError, setLessonError] = useState("");
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -44,6 +51,8 @@ function CourseDetail() {
       setError("");
       setCourse(null);
       setImageUnavailable(false);
+      setLessons([]);
+      setLessonError("");
 
       try {
         const data = await getCourseById(id);
@@ -105,6 +114,42 @@ function CourseDetail() {
       );
     } finally {
       setEnrolling(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!course || !localStorage.getItem("learnhubToken")) return;
+
+    const fetchLessons = async () => {
+      setLessonsLoading(true);
+      setLessonError("");
+      try {
+        setLessons(await getCourseLessons(course._id));
+      } catch (err) {
+        setLessonError(
+          err.response?.data?.message || "Unable to load course lessons."
+        );
+      } finally {
+        setLessonsLoading(false);
+      }
+    };
+
+    fetchLessons();
+  }, [course]);
+
+  const handleLessonDownload = async (lesson) => {
+    try {
+      const file = await downloadCourseLesson(course._id, lesson._id);
+      const url = URL.createObjectURL(file);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = lesson.fileName;
+      link.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      setLessonError(
+        err.response?.data?.message || "Unable to download this lesson."
+      );
     }
   };
 
@@ -179,14 +224,56 @@ function CourseDetail() {
       />
 
       <Container className="course-detail-container course-detail-content-layout">
-        <CourseDetailInformation
-          course={course}
-          courseCategory={courseCategory}
-          courseDuration={courseDuration}
-          courseLevel={courseLevel}
-          coursePrice={coursePrice}
-          instructorName={instructorName}
-        />
+        <div>
+          <CourseDetailInformation
+            course={course}
+            courseCategory={courseCategory}
+            courseDuration={courseDuration}
+            courseLevel={courseLevel}
+            coursePrice={coursePrice}
+            instructorName={instructorName}
+          />
+          {localStorage.getItem("learnhubToken") && (
+            <Card className="dashboard-panel mt-4">
+              <Card.Body>
+                <h2 className="h4">Course Lessons</h2>
+                <p className="text-secondary">
+                  Lessons are available to enrolled students and course instructors.
+                </p>
+                {lessonsLoading && <Spinner animation="border" role="status" />}
+                {lessonError && (
+                  <Alert variant="info" className="mt-3" role="alert">
+                    {lessonError}
+                  </Alert>
+                )}
+                {!lessonsLoading && !lessonError && lessons.length === 0 && (
+                  <p className="text-secondary mb-0">
+                    No lessons have been uploaded yet.
+                  </p>
+                )}
+                {lessons.map((lesson) => (
+                  <div
+                    key={lesson._id}
+                    className="d-flex justify-content-between align-items-center gap-3 border-top py-3"
+                  >
+                    <div>
+                      <strong>{lesson.title}</strong>
+                      <small className="d-block text-secondary">
+                        {lesson.fileName}
+                      </small>
+                    </div>
+                    <Button
+                      variant="outline-primary"
+                      onClick={() => handleLessonDownload(lesson)}
+                    >
+                      Download
+                    </Button>
+                  </div>
+                ))}
+              </Card.Body>
+            </Card>
+          )}
+        </div>
         <CourseEnrollmentCard
           coursePrice={coursePrice}
           courseDuration={courseDuration}

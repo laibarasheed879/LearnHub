@@ -1,6 +1,7 @@
 
 const Enrollment = require("../models/Enrollment");
 const Course = require("../models/Course");
+const mongoose = require("mongoose");
 
 // Enroll logged-in student in a course
 const enrollInCourse = async (req, res) => {
@@ -10,6 +11,12 @@ const enrollInCourse = async (req, res) => {
     if (!courseId) {
       return res.status(400).json({
         message: "Course ID is required.",
+      });
+    }
+
+    if (!mongoose.isValidObjectId(courseId)) {
+      return res.status(400).json({
+        message: "Invalid course ID.",
       });
     }
 

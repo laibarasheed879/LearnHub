@@ -3,6 +3,7 @@
 **Learn • Grow • Achieve**
 
 LearnHub is a full-stack Learning Management System (LMS) developed using the MERN stack. It provides a platform where students can explore courses, enroll in learning programs, and track their learning activities, while administrators can manage courses through a dedicated dashboard.
+Instructors can create and manage their own courses, upload course lessons, and view enrolled students.
 
 # Live Demo
 
@@ -22,13 +23,17 @@ LearnHub is a full-stack Learning Management System (LMS) developed using the ME
 
 # Admin Features
 - Admin authentication and role-based access
-- Add new courses
-- View and manage existing courses
-- Update course information
-- Delete courses
-- Manage course content through the admin dashboard
+- Add, view, update, and delete courses
+- View users and update account roles
+- View platform analytics for users, courses, enrollments, and progress
 
-#User Interface
+# Instructor Features
+- Instructor registration and role-based dashboard access
+- Create, view, update, and delete owned courses
+- Upload and delete PDF, text, MP4, MOV, and WebM lesson files (up to 4 MB each)
+- View students enrolled in owned courses
+
+## User Interface
 - Modern blue-and-white design
 - Responsive layout for different screen sizes
 - Reusable React components
@@ -50,6 +55,38 @@ LearnHub is a full-stack Learning Management System (LMS) developed using the ME
 | JSON Web Token (JWT) | Authentication |
 | CSS | Styling and responsive design |
 | Vercel | Deployment |
+
+## API Endpoints
+
+All endpoints are prefixed with `/api`. Protected endpoints require
+`Authorization: Bearer <token>`.
+
+| Method | Endpoint | Access | Purpose |
+|---|---|---|---|
+| POST | `/auth/register` | Public | Register as a student or instructor |
+| POST | `/auth/login` | Public | Login and receive a JWT |
+| GET | `/auth/profile` | Authenticated | Read the current token's profile |
+| GET | `/courses` | Public | List courses |
+| GET | `/courses/:id` | Public | Read one course |
+| POST | `/courses` | Admin or instructor | Create a course |
+| PUT | `/courses/:id` | Admin or owning instructor | Update a course |
+| DELETE | `/courses/:id` | Admin or owning instructor | Delete a course |
+| GET | `/courses/my-courses` | Instructor | List the instructor's courses |
+| GET | `/courses/instructor/enrollments` | Instructor | List students enrolled in their courses |
+| GET | `/courses/:courseId/lessons` | Enrolled student, owning instructor, or admin | List course lessons |
+| POST | `/courses/:courseId/lessons` | Admin or owning instructor | Upload a lesson (`title` and multipart `file`) |
+| GET | `/courses/:courseId/lessons/:lessonId/file` | Enrolled student, owning instructor, or admin | Download a lesson |
+| DELETE | `/courses/:courseId/lessons/:lessonId` | Admin or owning instructor | Delete a lesson |
+| POST | `/enrollments` | Student | Enroll using `{ "courseId": "..." }` |
+| GET | `/enrollments/my-courses` | Student | List enrolled courses and progress |
+| GET | `/admin/users` | Admin | List users |
+| PATCH | `/admin/users/:id/role` | Admin | Update a user's role |
+| DELETE | `/admin/users/:id` | Admin | Delete a user |
+| GET | `/admin/analytics` | Admin | Read platform counts and average progress |
+
+Lesson files are stored in MongoDB with their lesson records so uploads persist
+across serverless deployments. The 4 MB per-file limit accommodates the request
+size limits of the configured Vercel deployment.
 
 ## 📁 Project Structure
 

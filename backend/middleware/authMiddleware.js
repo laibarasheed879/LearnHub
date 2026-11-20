@@ -2,6 +2,12 @@
 const jwt = require("jsonwebtoken");
 
 const protect = (req, res, next) => {
+  if (!process.env.JWT_SECRET) {
+    return res.status(500).json({
+      message: "Authentication is not configured on the server.",
+    });
+  }
+
   try {
     const authHeader = req.headers.authorization;
 

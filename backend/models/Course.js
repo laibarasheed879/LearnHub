@@ -16,6 +16,11 @@ const courseSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    instructorId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      index: true,
+    },
     category: {
       type: String,
       required: true,

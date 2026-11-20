@@ -160,7 +160,13 @@ function Courses() {
 
   const handleEnroll = async (courseId) => {
     const token = localStorage.getItem("learnhubToken");
-    const user = JSON.parse(localStorage.getItem("learnhubUser") || "null");
+    let user = null;
+
+    try {
+      user = JSON.parse(localStorage.getItem("learnhubUser") || "null");
+    } catch {
+      user = null;
+    }
 
     if (!token || !user) {
       toast.info("Please login first to enroll in a course.");

@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "../components/ProtectedRoute";
 import StudentDashboard from "../pages/StudentDashboard";
 import AdminDashboard from "../pages/AdminDashboard";
+import InstructorDashboard from "../pages/InstructorDashboard";
 import Home from "../pages/Home";
 import Courses from "../pages/Courses";
 import CourseDetail from "../pages/CourseDetail";
@@ -36,6 +37,15 @@ function AppRoutes() {
   element={
     <ProtectedRoute allowedRole="admin">
       <AdminDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/instructor-dashboard"
+  element={
+    <ProtectedRoute allowedRole="instructor">
+      <InstructorDashboard />
     </ProtectedRoute>
   }
 />

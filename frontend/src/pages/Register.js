@@ -13,6 +13,7 @@ function Register() {
     name: "",
     email: "",
     password: "",
+    role: "student",
   });
 
   const [loading, setLoading] = useState(false);
@@ -56,6 +57,7 @@ function Register() {
         name,
         email,
         password: formData.password,
+        role: formData.role,
       });
 
       toast.success(data.message || "Account created successfully!");
@@ -114,6 +116,20 @@ function Register() {
               required
             />
           </div>
+        </Form.Group>
+
+        <Form.Group className="auth-field">
+          <Form.Label htmlFor="register-role">Account type</Form.Label>
+          <Form.Select
+            id="register-role"
+            name="role"
+            value={formData.role}
+            onChange={handleChange}
+            autoComplete="off"
+          >
+            <option value="student">Student</option>
+            <option value="instructor">Instructor</option>
+          </Form.Select>
         </Form.Group>
 
         <Form.Group className="auth-field">

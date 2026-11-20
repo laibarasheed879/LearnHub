@@ -27,6 +27,12 @@ import {
 } from "react-bootstrap";
 import axios from "axios";
 import { API_BASE_URL } from "../services/apiConfig";
+import {
+  deleteAdminUser,
+  getAdminAnalytics,
+  getAdminUsers,
+  updateAdminUserRole,
+} from "../services/adminService";
 
 const API_URL = `${API_BASE_URL}/courses`;
 
@@ -51,7 +57,11 @@ function AdminDashboard() {
   });
   const [activeSection, setActiveSection] = useState("overview");
   const [courses, setCourses] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [analytics, setAnalytics] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [usersLoading, setUsersLoading] = useState(true);
+  const [userActionId, setUserActionId] = useState("");
   const [saving, setSaving] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [message, setMessage] = useState("");
@@ -76,8 +86,28 @@ function AdminDashboard() {
     }
   };
 
+  const loadAdminData = async () => {
+    setUsersLoading(true);
+    try {
+      const [userData, analyticsData] = await Promise.all([
+        getAdminUsers(),
+        getAdminAnalytics(),
+      ]);
+      setUsers(userData);
+      setAnalytics(analyticsData);
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Unable to load users and platform analytics."
+      );
+    } finally {
+      setUsersLoading(false);
+    }
+  };
+
   useEffect(() => {
     loadCourses();
+    loadAdminData();
   }, []);
 
   const handleChange = (e) => {
@@ -195,6 +225,42 @@ function AdminDashboard() {
     }
   };
 
+  const handleRoleChange = async (user, role) => {
+    setMessage("");
+    setError("");
+    setUserActionId(user._id);
+    try {
+      const result = await updateAdminUserRole(user._id, role);
+      setUsers((currentUsers) =>
+        currentUsers.map((current) =>
+          current._id === user._id ? result.user : current
+        )
+      );
+      setMessage(result.message);
+      await loadAdminData();
+    } catch (err) {
+      setError(err.response?.data?.message || "Unable to update user role.");
+    } finally {
+      setUserActionId("");
+    }
+  };
+
+  const handleDeleteUser = async (user) => {
+    if (!window.confirm(`Delete the account for ${user.name}?`)) return;
+    setMessage("");
+    setError("");
+    setUserActionId(user._id);
+    try {
+      const result = await deleteAdminUser(user._id);
+      setMessage(result.message);
+      await loadAdminData();
+    } catch (err) {
+      setError(err.response?.data?.message || "Unable to delete this user.");
+    } finally {
+      setUserActionId("");
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("learnhubToken");
     localStorage.removeItem("learnhubUser");
@@ -222,6 +288,12 @@ function AdminDashboard() {
                 >
                   <LayoutDashboard size={18} aria-hidden="true" />
                   <span>Overview</span>
+                </a>
+                <a className="sidebar-link" href="#manage-users">
+                  <span>♙</span> Manage Users
+                </a>
+                <a className="sidebar-link" href="#analytics">
+                  <span>▤</span> Analytics
                 </a>
                 <a
                   className={`sidebar-link ${activeSection === "manage-courses" ? "active" : ""}`}
@@ -355,6 +427,29 @@ function AdminDashboard() {
                   </a>
                 </div>
               </section>
+
+              <Row className="g-3 mb-4" id="analytics">
+                {[
+                  ["Users", analytics?.users],
+                  ["Courses", analytics?.courses],
+                  ["Students", analytics?.usersByRole?.student],
+                  ["Instructors", analytics?.usersByRole?.instructor],
+                  ["Enrollments", analytics?.enrollments],
+                  [
+                    "Average Progress",
+                    analytics ? `${analytics.averageProgress}%` : null,
+                  ],
+                ].map(([label, value]) => (
+                  <Col key={label} sm={6} xl>
+                    <Card className="dashboard-stat h-100">
+                      <Card.Body>
+                        <p>{label}</p>
+                        <h2>{value ?? (usersLoading ? "…" : 0)}</h2>
+                      </Card.Body>
+                    </Card>
+                  </Col>
+                ))}
+              </Row>
 
               {message && (
                 <Alert
@@ -620,6 +715,69 @@ function AdminDashboard() {
                                   <span>Delete</span>
                                 </Button>
                               </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </Table>
+                  )}
+                </Card.Body>
+              </Card>
+
+              <Card className="dashboard-panel mt-4" id="manage-users">
+                <Card.Body className="p-3 p-md-4">
+                  <div className="admin-section-heading mb-3">
+                    <div>
+                      <p className="dashboard-eyebrow">ACCOUNT MANAGEMENT</p>
+                      <h4>Manage Users</h4>
+                    </div>
+                    <Badge bg="secondary">{users.length} total</Badge>
+                  </div>
+                  {usersLoading ? (
+                    <div className="text-center py-4">
+                      <Spinner animation="border" />
+                      <p className="mt-2">Loading users...</p>
+                    </div>
+                  ) : users.length === 0 ? (
+                    <div className="admin-empty-state">No user accounts found.</div>
+                  ) : (
+                    <Table responsive hover className="admin-course-table">
+                      <thead>
+                        <tr>
+                          <th>Name</th>
+                          <th>Email</th>
+                          <th>Role</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {users.map((user) => (
+                          <tr key={user._id}>
+                            <td>{user.name}</td>
+                            <td>{user.email}</td>
+                            <td>
+                              <Form.Select
+                                aria-label={`Role for ${user.name}`}
+                                value={user.role}
+                                disabled={userActionId === user._id}
+                                onChange={(event) =>
+                                  handleRoleChange(user, event.target.value)
+                                }
+                              >
+                                <option value="student">Student</option>
+                                <option value="instructor">Instructor</option>
+                                <option value="admin">Admin</option>
+                              </Form.Select>
+                            </td>
+                            <td>
+                              <Button
+                                size="sm"
+                                variant="outline-danger"
+                                disabled={userActionId === user._id}
+                                onClick={() => handleDeleteUser(user)}
+                              >
+                                Delete
+                              </Button>
                             </td>
                           </tr>
                         ))}

@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const enrollmentRoutes = require("./routes/enrollmentRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const connectDB = require("./config/db");
 const courseRoutes = require("./routes/courseRoutes");
 const app = express();
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
 app.use("/api/enrollments", enrollmentRoutes);
+app.use("/api/admin", adminRoutes);
 // Connect to MongoDB
 connectDB();
 
